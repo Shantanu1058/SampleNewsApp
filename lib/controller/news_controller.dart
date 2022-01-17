@@ -42,7 +42,7 @@ class NewsController extends GetxController {
     return json.decode(response.body) as Map;
   }
 
-  Future fetchAllNews() async {
+  Future<void> fetchAllNews() async {
     final url = Uri.parse("https://api.first.org/data/v1/news");
     final resposne =
         await http.get(url, headers: {'Content-Type': 'application/json'});
@@ -54,23 +54,37 @@ class NewsController extends GetxController {
     final selectedNews = newsList.firstWhere((news) {
       return news["id"] == id;
     });
-    print(selectedNews);
     if (isFavorite) {
       favoriteNewsList.add(selectedNews);
     } else {
       favoriteNewsList.remove(selectedNews);
     }
+    print(favoriteNewsList);
     update();
   }
 
-  bool isFavorite(int id) {
-    bool isPresent = false;
-    try {
-      dynamic item = favoriteNewsList.firstWhere(((news) => news["id"] == id));
-      isPresent = item.isNotEmpty;
-    } catch (e) {
-      print(e);
+  var isFavorite = [].obs;
+
+  toogle(int id) {
+    print(id);
+    if (isFavorite.contains(id)) {
+      favoriteNews(id, false);
+      isFavorite.remove(id);
+    } else {
+      isFavorite.add(id);
+      favoriteNews(id, true);
     }
-    return isPresent;
+    update();
   }
+
+  // bool toogleFavorite(int id) {
+  //   bool isPresent = false;
+  //   try {
+  //     dynamic item = favoriteNewsList.firstWhere(((news) => news["id"] == id));
+  //     isPresent = item.isNotEmpty;
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  //   return isPresent;
+  // }
 }

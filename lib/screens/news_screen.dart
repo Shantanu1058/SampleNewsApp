@@ -115,16 +115,22 @@ class NewsScreen extends StatelessWidget {
                                             horizontal: 8.0),
                                         child: IconButton(
                                             onPressed: () {
-                                              newsController.favoriteNews(
-                                                  news["id"], true);
+                                              newsController.toogle(news["id"]);
+                                              print(newsController.isFavorite
+                                                  .contains(news["id"]));
                                             },
-                                            icon: Icon(
-                                              isFavorite
-                                                  ? Icons.favorite
-                                                  : Icons.favorite_border_sharp,
-                                              color: isFavorite
-                                                  ? Colors.red
-                                                  : Colors.black,
+                                            icon: Obx(
+                                              () => Icon(
+                                                newsController.isFavorite
+                                                        .contains(news["id"])
+                                                    ? Icons.favorite
+                                                    : Icons
+                                                        .favorite_border_sharp,
+                                                color: newsController.isFavorite
+                                                        .contains(news["id"])
+                                                    ? Colors.red
+                                                    : Colors.black,
+                                              ),
                                             )),
                                       ),
                                       Flexible(
